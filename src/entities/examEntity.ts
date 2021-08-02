@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, ManyToOne } from "typeorm";
-import Category from "./categoryEntity";
+import Category from "./categoriesEntity";
 import Discipline from "./disciplineEntity";
 import Professors from "./professorsEntity";
 

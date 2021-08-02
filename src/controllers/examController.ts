@@ -3,7 +3,7 @@ import { examCreationSchema } from "../schemas/examSchemas";
 import { verifyDiscipline } from "../services/disciplineService";
 import { verifyProfessors } from "../services/professorsService";
 import { createExam } from "../services/examService";
-import { verifyCategory } from "../services/categoryService";
+import { verifyCategory } from "../services/categoriesService";
 
 export async function newExam(req: Request, res: Response) {
     const { examName, examLink, category, professor, discipline } = req.body;
