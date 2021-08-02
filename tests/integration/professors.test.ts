@@ -1,10 +1,10 @@
 import supertest from "supertest";
 import { getConnection } from "typeorm";
 import app, { init } from "../../src/app";
-import { professorsBody, disciplineBody, completeBody } from "../factories/bodyFactory";
+import { professorsBody, disciplineBody, completeBody, examInformation } from "../factories/bodyFactory";
 import { clearDatabase } from "../utils/database";
 import { createDiscipline } from "../utils/database";
-import { createNewProfessor, findProfessor } from "../utils/database";
+import { createNewProfessor, findProfessor, findDiscipline } from "../utils/database";
 
 beforeAll(async () => {
     await init();
@@ -69,7 +69,7 @@ describe("POST /new-professor", () => {
   
 });
 
-describe("post /find-professorsId", ()=>{
+describe("POST /find-professorsId", ()=>{
     it("should answer with 200 when trying to find the correct professor using id", async ()=>{
       const name = professorsBody();
       const discipline = disciplineBody();
@@ -86,8 +86,21 @@ describe("post /find-professorsId", ()=>{
     });
   
     it("should answer with 400 when trying to find the correct professor using id but with empty params", async ()=>{
-      const name = professorsBody();
       const response = await supertest(app).post("/find-professorsId").send({id: ""});
       expect(response.status).toEqual(400);
     });
+});
+
+describe("GET listOfProfessorsWithDisciplines", ()=>{
+  it("should answer with 200 when trying get all professors and there disciplines", async ()=>{
+    const name = professorsBody();
+    const discipline = disciplineBody();
+    await createNewProfessor(name, discipline);
+    const examInfo = examInformation();
+    const professor = await findProfessor(name);
+    const disciplineOnDatabase = await findDiscipline(discipline);
+    await supertest(app).post("/new-exam").send({examName: examInfo.name, examLink: examInfo.examLink, category: "P1", professor: professor.name, discipline: disciplineOnDatabase.name });
+    const response = await supertest(app).get("/listOfProfessorsWithDisciplines")
+    expect(response.status).toEqual(200);
+  });
 });

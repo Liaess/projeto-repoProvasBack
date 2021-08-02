@@ -30,3 +30,7 @@ return await getRepository(Professors).findOne({name});
 export async function findDiscipline(name:string) {
   return await getRepository(Discipline).findOne({name});
 }
+
+export async function findExam(examLink: string) {
+  return await getRepository(Exam).findOne({examLink})
+}

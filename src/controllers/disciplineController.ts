@@ -19,7 +19,8 @@ export async function getDisciplineById(req: Request, res: Response) {
   try{
     const value = idSchemaFindDisciplines.validate({id:id});
     if(value.error)res.sendStatus(400);
-    const result = await getAllExamInfos(id)
+    const result = await getAllExamInfos(id);
+    if(result.length === 0) return res.sendStatus(401);
     res.send(result)
   }catch(e){
     console.log(e);
