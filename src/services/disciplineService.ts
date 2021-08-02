@@ -9,8 +9,15 @@ export async function getAll() {
     return await getRepository(Discipline).find();
 }
 
-export async function getDisciplinesWithProfessorsRelations(id:number) {
+export async function getOneDisciplinesWithProfessorsRelations(id:number) {
     return await getRepository(Discipline).findOne(id,{
       relations: ["professor"]
     })
+}
+
+export async function getAllDisciplinesWithProfessorRelations() {
+    return await getRepository(Discipline).find({
+        relations: ["professor"],
+        order: {semesterId:"ASC"}
+    });
 }

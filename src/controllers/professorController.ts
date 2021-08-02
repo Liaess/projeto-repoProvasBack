@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { idSchemaFindProfessor, professorsCreationSchema } from "../schemas/professorsSchemas";
-import { getDisciplinesWithProfessorsRelations, verifyDiscipline } from "../services/disciplineService";
-import { verifyProfessors, createProfessors } from "../services/professorsService";
+import { getOneDisciplinesWithProfessorsRelations, verifyDiscipline } from "../services/disciplineService";
+import { verifyProfessors, createProfessors, getAllProfessorAndDisciplines } from "../services/professorsService";
 import { verifyExistence, createProfessorsDisciplinesTable } from "../services/professors_disciplinesService";
 
 export async function newProfessor (req: Request, res: Response){
@@ -36,8 +36,18 @@ export async function findProfessorsId(req: Request, res: Response) {
   const value = idSchemaFindProfessor.validate({id:id});
   if(value.error) return res.sendStatus(400);
   try{
-    const result = await getDisciplinesWithProfessorsRelations(id)
+    const result = await getOneDisciplinesWithProfessorsRelations(id)
     res.send(result)
+  }catch(e){
+    console.log(e);
+    res.sendStatus(500);
+  }
+}
+
+export async function getAllProfessorsAndThereDisciplines(req: Request, res: Response) {
+  try{
+    const result = await getAllProfessorAndDisciplines();
+    res.send(result);
   }catch(e){
     console.log(e);
     res.sendStatus(500);

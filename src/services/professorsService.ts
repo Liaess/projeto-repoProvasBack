@@ -8,3 +8,9 @@ export async function verifyProfessors(name:string): Promise<Professors> {
 export async function createProfessors(name:string){
     return (await getRepository(Professors).insert({ name })).generatedMaps[0].id;
 }
+
+export async function getAllProfessorAndDisciplines() {
+  return await getRepository(Professors).find({
+    relations: ["discipline"]
+  })
+}
